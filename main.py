@@ -7,7 +7,7 @@ import streamlit as st
 
 Claude_3 = st.secrets["ANTHROPIC_API_KEY"]
 
-LLM = ChatAnthropic(temperature=0,model_name="claude-3-opus-2024229")
+LLM = ChatAnthropic(temperature=0,model_name="claude-3-opus-20240229")
 
 search = DuckDuckGoSearchRun()
 
