@@ -1,80 +1,75 @@
-from crewai import Agent , Crew , Task
-from langchain.tools import DuckDuckGoSearchRun
+from crewai import Agent, Crew, Task
+from langchain_community.tools import DuckDuckGoSearchRun
 from langchain.agents import Tool
 from langchain_anthropic import ChatAnthropic
-import os
-import streamlit as st
 
-Claude_3 = st.secrets["ANTHROPIC_API_KEY"]
+class EmailCrew:
+    def __init__(self, inputs):
+        self.inputs = inputs
+        self.llm = ChatAnthropic(temperature=0, model_name="claude-3-opus-20240229")
+        self.search = DuckDuckGoSearchRun()
+        self.tool = Tool(
+            name="Search",
+            func=self.search.run,
+            description="useful for when you need to research for info"
+        )
+        self.setup_agents()
+        self.setup_tasks()
+        self.crew = Crew(
+            agents=[self.researcher, self.writer],
+            tasks=[self.task1, self.task2],
+            verbose=2
+        )
 
-LLM = ChatAnthropic(temperature=0,model_name="claude-3-opus-20240229")
+    def setup_agents(self):
+        self.researcher = Agent(
+            role="Email Research Specialist",
+            goal='Research and analyze target audience and content requirements',
+            backstory="""You are an expert at researching target audiences and creating
+            tailored email content strategies.""",
+            verbose=True,
+            allow_delegation=False,
+            llm=self.llm,
+            tools=[self.tool]
+        )
 
-search = DuckDuckGoSearchRun()
+        self.writer = Agent(
+            role='Email Content Strategist',
+            goal='Craft compelling email content',
+            backstory="""You are an expert email copywriter who creates engaging
+            and conversion-focused emails.""",
+            verbose=True,
+            allow_delegation=False,
+            llm=self.llm,
+            tools=[self.tool]
+        )
 
-tool = Tool(
-        name="Search",
-        func=search.run,
-        description="useful for when you need to reaseach for info"
-    )
+    def setup_tasks(self):
+        self.task1 = Task(
+            description=f"""Research and analyze the following input:
+            {self.inputs}
+            
+            Provide insights on:
+            1. Target audience preferences
+            2. Industry context
+            3. Key messaging points
+            Your final answer must be a detailed analysis report.""",
+            agent=self.researcher
+        )
 
-#Team Member
+        self.task2 = Task(
+            description=f"""Using the research insights, create an email that:
+            - Matches the specified email type
+            - Speaks to the target audience
+            - Incorporates the key points
+            - Is engaging and conversion-focused
+            
+            Input details:
+            {self.inputs}
+            
+            Your final answer must be the complete email with subject line.""",
+            agent=self.writer
+        )
 
-reasarcher = Agent(
-    role="Tech Research",
-    goal='Uncover cutting-edge developments in AI and data science',
-    backstory="""You work at a leading tech think tank.
-    Your expertise lies in identifying emerging trends.
-    You Have a knack for dissecting complex data and presenting
-    actionable insights""",
-    verbose=True,
-    allow_delegation=False,
-    llm=LLM,
-    tools=[tool]
-)
-
-
-writer = Agent(
-    role='Tech Content Strategist',
-    goal= 'Craft compelling content on tech advancements',
-    backstory="""You are a renowned Content Strategist, known for Your insightful and engaging article.
-    You transform complex concepts into compelling narratives.""",
-    verbose=True,
-    allow_delegation=False,
-    llm=LLM,
-    tools=[tool]
-)
-
-
-#Tasks
-
-task1 = Task(
-    description="""Conduct a comprehensive analysis of the latest advancements in AI in 2024.
-    Identify Key trends, breakthrough technologies, and potential industry impact.
-    your final answer Must be a full analysis report""",
-    agent=reasarcher
-)
-
-
-task2 = Task(
-    description="""Using the insights provided, develop an engaging blog post that highlights the most significant AI advancements.
-    Your post should be informative yet accessible, catering to a tech-savvy audience.
-    Make it sound cool, avoid complex words so it doesn't sound like AI.
-    Your final Answer Must be the full Blog post of at least 4 paragraphs.""",
-    agent=writer
-)
-
-
-
-#create Crewai
-
-Crew = Crew(
-    agents=[reasarcher,writer],
-    tasks=[task1,task2],
-    verbose=2
-)
-
-
-#start work!
-
-result = Crew.kickoff()
-print(result)
+    def run(self):
+        return self.crew.kickoff()
