@@ -8,6 +8,8 @@ st.title('Email Creator by Marketing.MBA')
 
 # Load the API key from Streamlit secrets and set it as an environment variable
 os.environ["ANTHROPIC_API_KEY"] = st.secrets["ANTHROPIC_API_KEY"]
+os.environ["PERPLEXITY_API_KEY"] = st.secrets["PERPLEXITY_API_KEY"]
+
 
 # Create a sidebar for input fields
 with st.sidebar:
