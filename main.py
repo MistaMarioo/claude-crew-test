@@ -6,8 +6,8 @@ from langchain_anthropic import ChatAnthropic  # Import Anthropic's ChatAnthropi
 
 
 llm_perp = LLM(
-    model="perplexity/mistral-7b-instruct",
-    base_url="https://api.perplexity.ai/v1"
+    model="llama-3.1-sonar-large-128k-online",
+    base_url="https://api.perplexity.ai/v1/chat/completions"
 )
 
 
