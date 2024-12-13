@@ -2,4 +2,3 @@ langchain
 crewai
 langchain_anthropic
 duckduckgo-search
-sqlite3
