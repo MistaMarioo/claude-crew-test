@@ -10,13 +10,11 @@ LLM = ChatAnthropic(temperature=0,model_name="claude-3-opus-2024229")
 
 search = DuckDuckGoSearchRun()
 
-tool = [
-    Tool(
+tool = Tool(
         name="Search",
         func=search.run,
         description="useful for when you need to reaseach for info"
     )
-]
 
 #Team Member
 
