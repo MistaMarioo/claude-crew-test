@@ -1,8 +1,15 @@
 # main.py
-from crewai import Agent, Crew, Task  # Import core CrewAI components
+from crewai import Agent, Crew, Task, LLM  # Import core CrewAI components
 from langchain_community.tools import DuckDuckGoSearchRun  # Import search tool
 from langchain.agents import Tool  # Import Tool class for creating tools
 from langchain_anthropic import ChatAnthropic  # Import Anthropic's ChatAnthropic
+
+
+llm_perp = LLM(
+    model="perplexity/mistral-7b-instruct",
+    base_url="https://api.perplexity.ai/v1"
+)
+
 
 class EmailCrew:
     def __init__(self, inputs):
