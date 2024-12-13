@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 from main import EmailCrew  # Import the EmailCrew class
 
 st.title('Email Creator by Marketing.MBA')
