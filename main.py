@@ -3,8 +3,9 @@ from langchain.tools import DuckDuckGoSearchRun
 from langchain.agents import Tool
 from langchain_anthropic import ChatAnthropic
 import os
+import streamlit as st
 
-Claude_3 = os.environ["ANTHROPIC_API_kEY"]
+Claude_3 = os.environ["ANTHROPIC_API_kEY"] = st.secrets["ANTHROPIC_API_kEY"]
 
 LLM = ChatAnthropic(temperature=0,model_name="claude-3-opus-2024229")
 
