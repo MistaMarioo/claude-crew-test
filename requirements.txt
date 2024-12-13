@@ -1,4 +1,4 @@
 langchain
-crewai==0.5
+crewai
 langchain_anthropic
 duckduckgo-search
