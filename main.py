@@ -5,13 +5,6 @@ from langchain.agents import Tool  # Import Tool class for creating tools
 from langchain_anthropic import ChatAnthropic  # Import Anthropic's ChatAnthropic
 
 
-llm_perp = LLM(
-    model="llama-3.1-sonar-large-128k-online",
-    base_url="https://api.perplexity.ai/v1",
-    endpoint="/chat/completions"
-)
-
-
 class EmailCrew:
     def __init__(self, inputs):
         # Initialize the language model with Claude 3
